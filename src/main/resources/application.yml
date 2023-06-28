@@ -1,0 +1,20 @@
+spring:
+    profiles:
+        include:
+            - local, prod
+        active: local
+    batch:
+      job:
+        enabled: false
+    security:
+        oauth2:
+            client:
+                registration:
+                    riman:
+                        client-id: sb-6d1fa376-3646-474a-83af-bf18d16af027!b4317|it-rt-int-test-01!b134
+                        client-secret: 7cc88252-d8a9-4e13-adfb-f6a24aa6630a$p-s5KH1-NF8hDzG0dMZI7MMSxWaNbZe9NfcHucC40c0=
+                        authorization-grant-type: client_credentials
+                provider:
+                    riman:
+                        token-uri: https://int-test-01.authentication.jp10.hana.ondemand.com/oauth/token
+                        authorization-uri: https://int-test-01.it-cpi006-rt.cfapps.jp10.hana.ondemand.com

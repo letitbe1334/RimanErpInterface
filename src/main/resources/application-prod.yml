@@ -1,0 +1,10 @@
+spring:
+    universe:
+        datasource:
+            dbms: universe
+            driver: com.mysql.cj.jdbc.Driver
+            jdbc-url: jdbc:mysql://development-combine-domain-db.cfizanbwsdcy.ap-northeast-2.rds.amazonaws.com:3306/erp-system?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
+            username: andami_dhkim
+            password: Andami34!
+#            mapper-locations: classpath:sqlmap/**/*.xml
+#            mybatis-setting-locations: classpath:sqlmap/sqlmap-config.xml
