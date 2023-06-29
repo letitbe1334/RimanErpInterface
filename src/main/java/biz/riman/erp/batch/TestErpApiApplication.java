@@ -35,8 +35,11 @@ public class TestErpApiApplication {
         JobLauncher jobLauncher = ctx.getBean(JobLauncher.class);
 
         if (args.length > 0) {
-            Job job = ctx.getBean(args[0], Job.class);
-            jobLauncher.run(job, new JobParameters());
+            for (String arg : args) {
+                logger.error("## JOB NAME ARGUMENTS {}", arg);
+                Job job = ctx.getBean(arg, Job.class);
+                jobLauncher.run(job, new JobParameters());
+            }
         } else {
             logger.error("배치 잡 이름을 입력해 주세요. EX) {}", "java -jar app.jar updateTop100CoinPriceJob");
         }
