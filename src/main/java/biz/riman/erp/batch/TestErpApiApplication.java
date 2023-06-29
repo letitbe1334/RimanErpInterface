@@ -9,7 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TestErpApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TestErpApiApplication.class, args);
+		final var context = SpringApplication.run(TestErpApiApplication.class, args);
+		System.exit(SpringApplication.exit(context));
 	}
 
 }
