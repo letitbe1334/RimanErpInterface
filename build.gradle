@@ -17,6 +17,10 @@ configurations {
 	}
 }
 
+bootJar{
+    archiveFileName = 'RimanErpInterfaceBatch.jar'
+}
+
 repositories {
 	mavenCentral()
 }
