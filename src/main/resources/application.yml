@@ -5,7 +5,8 @@ spring:
         active: local
     batch:
       job:
-        enabled: false
+        enabled: true
+        names: ${job.name:NONE}
     security:
         oauth2:
             client:
