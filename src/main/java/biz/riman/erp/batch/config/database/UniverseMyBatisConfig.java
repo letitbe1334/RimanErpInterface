@@ -6,8 +6,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -29,8 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @EnableTransactionManagement 
 @ConfigurationProperties
 public class UniverseMyBatisConfig {
-    private static final Logger logger = LoggerFactory.getLogger(UniverseMyBatisConfig.class);
-
     @Value("${spring.universe.datasource.dbms}")
     private String dbms;
 
@@ -48,9 +44,9 @@ public class UniverseMyBatisConfig {
         sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:sqlmap/sqlmap-config.xml"));
         sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:sqlmap/" + dbms + "/*.xml")); 
 
-        logger.debug("####################################");
-        logger.debug("#  defaultSqlSessionFactory        #");
-        logger.debug("####################################");
+        log.info("####################################");
+        log.info("#  defaultSqlSessionFactory        #");
+        log.info("####################################");
         
         return sqlSessionFactoryBean.getObject();
     }

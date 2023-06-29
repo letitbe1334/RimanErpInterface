@@ -1,12 +1,9 @@
 package biz.riman.erp.batch.config.authentication;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.InMemoryReactiveOAuth2AuthorizedClientService;
@@ -19,10 +16,11 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 public class OAuth2ClientConfig {
-    private static final Logger logger = LoggerFactory.getLogger(OAuth2ClientConfig.class);
-    
     @Value("${spring.security.oauth2.client.endpoint}") 
     private String endPoint;
     
@@ -46,7 +44,7 @@ public class OAuth2ClientConfig {
 
     @Bean(name = "clientRegistrations")
     ReactiveClientRegistrationRepository clientRegistrations() {
-        logger.info("## ClientRegistration 세팅 ##");
+        log.info("## ClientRegistration 세팅 ##");
         ClientRegistration registration = ClientRegistration
                 .withRegistrationId("riman")
                 .authorizationUri(authorizationUrl)
@@ -61,7 +59,7 @@ public class OAuth2ClientConfig {
 
     @Bean(name = "oAuth2SalesOrder")
     WebClient oAuth2SalesOrder(@Qualifier("clientRegistrations") ReactiveClientRegistrationRepository clientRegistrations) {
-        logger.info("## OAuth2SalesOrder WebClient 세팅 ##");
+        log.info("## OAuth2SalesOrder WebClient 세팅 ##");
         InMemoryReactiveOAuth2AuthorizedClientService clientService = new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrations);
         AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager = new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(clientRegistrations, clientService);
         ServerOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);

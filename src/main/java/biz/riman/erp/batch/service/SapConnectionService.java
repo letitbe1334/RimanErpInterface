@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -23,11 +21,12 @@ import biz.riman.erp.batch.dto.salesOrder.PartnerDto;
 import biz.riman.erp.batch.dto.salesOrder.PricingElementDto;
 import biz.riman.erp.batch.dto.salesOrder.SalesOrderDto;
 import biz.riman.erp.batch.dto.salesOrder.SalesOrderSapConnectionDto;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Service
 public class SapConnectionService {
-    private static final Logger logger = LoggerFactory.getLogger(SapConnectionService.class);
 
     @Autowired
     private SalesOrderSapConnectionDto salesOrderSapConnectionDto;
@@ -45,11 +44,11 @@ public class SapConnectionService {
     
     public String SapDirectConnectionSalesOrder() {
         String response = new String("");
-        logger.info("## SAP direct connection 시작 ##");
-        logger.info("");
+        log.info("## SAP direct connection 시작 ##");
+        log.info("");
         
         getToken();
-        logger.info("## Param setting ##");
+        log.info("## Param setting ##");
         List<PricingElementDto> pricingElements = new ArrayList<PricingElementDto>();
         PricingElementDto pricingElement = new PricingElementDto("YBHD", "2500", "KRW");
         pricingElements.add(pricingElement);
@@ -71,7 +70,7 @@ public class SapConnectionService {
                 pricingElements, items, partners);
         
         // api 요청
-        logger.info("## api 요청 ## {}", token);
+        log.info("## api 요청 ## {}", token);
         response = localApiClient
             .post()
             .uri(salesOrderSapConnectionDto.getUri())
@@ -88,17 +87,17 @@ public class SapConnectionService {
 //            .bodyToMono(String.class)
 //            .onErrorResume(e -> {
 //                if (e instanceof UnknownHostException) {
-//                    logger.warn("Failed, Host를 확인해주세요.");
+//                    log.warn("Failed, Host를 확인해주세요.");
 //                } else {
-//                    logger.error("Failed, API에서 오류가 발생하였습니다. 확인바랍니다.");
+//                    log.error("Failed, API에서 오류가 발생하였습니다. 확인바랍니다.");
 //                }
 //                return Mono.just(new String());
 //            })
 //            .subscribe(r -> {
-//                logger.info("## result : {}", r);
+//                log.info("## result : {}", r);
 //            });
             .exchangeToMono(res -> {
-                logger.info("## http Status {}", res.statusCode());
+                log.info("## http Status {}", res.statusCode());
                 if (res.statusCode().is2xxSuccessful()) {
                     return res.bodyToMono(String.class);
                 } else {
@@ -112,7 +111,7 @@ public class SapConnectionService {
 
     public void getToken() {
         // token 인증
-        logger.info("token 인증");
+        log.info("token 인증");
         localApiClient
                 .get()
                 .uri(salesOrderSapConnectionDto.getUri())
@@ -139,7 +138,7 @@ public class SapConnectionService {
                 })
                 .block();
         
-        logger.debug("### TOKEN : {}", token);
-        logger.debug("### myCookies : {}", myCookies);
+        log.debug("### TOKEN : {}", token);
+        log.debug("### myCookies : {}", myCookies);
     }
 }

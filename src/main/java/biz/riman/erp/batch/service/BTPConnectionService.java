@@ -1,10 +1,9 @@
 package biz.riman.erp.batch.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -18,10 +17,11 @@ import biz.riman.erp.batch.dto.salesOrder.ItemDto;
 import biz.riman.erp.batch.dto.salesOrder.PartnerDto;
 import biz.riman.erp.batch.dto.salesOrder.PricingElementDto;
 import biz.riman.erp.batch.dto.salesOrder.SalesOrderDto;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class BTPConnectionService {
-    private static final Logger logger = LoggerFactory.getLogger(BTPConnectionService.class);
 
     private final WebClient localApiClient;
     
@@ -30,12 +30,12 @@ public class BTPConnectionService {
         this.localApiClient = localApiClient;
     }
 
-    public String BTPConnectionSalesOrder() {
+    public String BTPConnectionSalesOrder(LocalDate date) {
         String response = new String("");
-        logger.info("## BTP Integration Connect _ Authentication Method : OAuth 시작 ##");
-        logger.info("");
+        log.info("## BTP Integration Connect _ Authentication Method : OAuth 시작 {} ##", date);
+        log.info("");
         
-        logger.info("## Param setting ##");
+        log.info("## Param setting ##");
         List<PricingElementDto> pricingElements = new ArrayList<PricingElementDto>();
         PricingElementDto pricingElement = new PricingElementDto("YBHD", "2500", "KRW");
         pricingElements.add(pricingElement);
@@ -57,7 +57,7 @@ public class BTPConnectionService {
                 pricingElements, items, partners);
         
         // api 요청
-        logger.info("## api 요청 ##");
+        log.info("## api 요청 ##");
         response = localApiClient
                 .post()
                 .uri("/http/ZSB_SALES_ORDER_01_START_STD")

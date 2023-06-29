@@ -9,8 +9,6 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -29,8 +27,6 @@ import reactor.core.publisher.Mono;
 @RunWith( SpringRunner.class )
 @SpringBootTest
 class SapDirectConnectionSalesOrder {
-    private static final Logger logger = LoggerFactory.getLogger(SapDirectConnectionSalesOrder.class);
-
     private final WebClient webClient;
 
     private String host = "https://my404942-api.s4hana.cloud.sap";
@@ -45,7 +41,7 @@ class SapDirectConnectionSalesOrder {
     @Autowired
     public SapDirectConnectionSalesOrder() {
         // webClient 기본 설정
-        logger.info("WebClient 기본 설정");
+        log.info("WebClient 기본 설정");
         ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
                  .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(-1)) // to unlimited memory size
                  .build();
@@ -58,7 +54,7 @@ class SapDirectConnectionSalesOrder {
     
     public void getToken() {
         // token 인증
-        logger.info("token 인증");
+        log.info("token 인증");
         webClient
                 .get()
                 .uri(uri)
@@ -85,22 +81,22 @@ class SapDirectConnectionSalesOrder {
                 })
                 .block();
         
-        logger.debug("### TOKEN : {}", token);
-        logger.debug("### myCookies : {}", myCookies);
+        log.debug("### TOKEN : {}", token);
+        log.debug("### myCookies : {}", myCookies);
     }
 
     @Test
     @DisplayName("SAP direct connection 테스트")
     void test() {
-        logger.info("## SAP direct connection 시작 ##");
-        logger.info("");
+        log.info("## SAP direct connection 시작 ##");
+        log.info("");
         
         getToken();
         String _token = new String(token);
         
         for (int i = 0; i < repeatCount; i++) {
             // Param setting
-            logger.info("## Param setting ##");
+            log.info("## Param setting ##");
 //            List<PricingElementModel> pricingElements = new ArrayList<PricingElementModel>();
 //            PricingElementModel pricingElement = new PricingElementModel("YBHD", "2500", "KRW");
 //            pricingElements.add(pricingElement);
@@ -215,7 +211,7 @@ class SapDirectConnectionSalesOrder {
             bodyMap.put("to_Partner", to_Partner);
             
             // api 요청
-            logger.info("## api 요청 ## {} : {}", _token, i);
+            log.info("## api 요청 ## {} : {}", _token, i);
             String response = webClient
                 .post()
                 .uri(uri)
@@ -232,17 +228,17 @@ class SapDirectConnectionSalesOrder {
 //                .bodyToMono(String.class)
 //                .onErrorResume(e -> {
 //                    if (e instanceof UnknownHostException) {
-//                        logger.warn("Failed, Host를 확인해주세요.");
+//                        log.warn("Failed, Host를 확인해주세요.");
 //                    } else {
-//                        logger.error("Failed, API에서 오류가 발생하였습니다. 확인바랍니다.");
+//                        log.error("Failed, API에서 오류가 발생하였습니다. 확인바랍니다.");
 //                    }
 //                    return Mono.just(new String());
 //                })
 //                .subscribe(r -> {
-//                    logger.info("## result : {}", r);
+//                    log.info("## result : {}", r);
 //                });
                 .exchangeToMono(res -> {
-                    logger.info("## http Status {}", res.statusCode());
+                    log.info("## http Status {}", res.statusCode());
                     if (res.statusCode().is2xxSuccessful()) {
                         return res.bodyToMono(String.class);
                     } else {
@@ -250,7 +246,7 @@ class SapDirectConnectionSalesOrder {
                     }
                 })
                 .block();
-            logger.info("## 결과 : {}", response);
+            log.info("## 결과 : {}", response);
         }
     }
 

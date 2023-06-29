@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -32,15 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 @RunWith( SpringRunner.class )
 @SpringBootTest
 class BTPConnectionSalesOrder {
-    private static final Logger logger = LoggerFactory.getLogger(BTPConnectionSalesOrder.class);
-
     private final WebClient webClient;
 
     final String url = "https://int-test-01.it-cpi006-rt.cfapps.jp10.hana.ondemand.com";
 
     @Autowired
     public BTPConnectionSalesOrder() {
-        logger.info("## Web client 셋팅 ##");
+        log.info("## Web client 셋팅 ##");
         ClientRegistration registration = ClientRegistration
                 .withRegistrationId("riman")
                 .authorizationUri("https://int-test-01.it-cpi006-rt.cfapps.jp10.hana.ondemand.com")
@@ -78,11 +74,11 @@ class BTPConnectionSalesOrder {
 
     @Test
     void test() {
-        logger.info("## BTP Integration Connect _ Authentication Method : OAuth 시작 ##");
-        logger.info("");
+        log.info("## BTP Integration Connect _ Authentication Method : OAuth 시작 ##");
+        log.info("");
         
         // Param setting
-        logger.info("## Param setting ##");
+        log.info("## Param setting ##");
         Map<String, Object> bodyMap = new HashMap<String, Object>();
         bodyMap.put("SalesOrderType", "TA");
         bodyMap.put("SalesOrganization", "4310");
@@ -178,7 +174,7 @@ class BTPConnectionSalesOrder {
         bodyMap.put("to_Partner", to_Partner);
         
         // api 요청
-        logger.info("## api 요청 ##");
+        log.info("## api 요청 ##");
         String response = this.webClient
                 .post()
                 .uri("/http/ZSB_SALES_ORDER_01_START_STD")
@@ -197,7 +193,7 @@ class BTPConnectionSalesOrder {
 //                  }
                 })
                 .block();
-        logger.info("## 결과 : {}", response);
+        log.info("## 결과 : {}", response);
     }
 
 }

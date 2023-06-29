@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameter;
@@ -26,8 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @RunWith( SpringRunner.class )
 @SpringBootTest
 public class SalesOrderTest {
-    private static final Logger logger = LoggerFactory.getLogger(SalesOrderTest.class);
-
     @Autowired 
     private ApplicationContext applicationContext;
     @Autowired
@@ -48,17 +44,17 @@ public class SalesOrderTest {
             JobExecution jobExecution = jobLauncher.run(job, parameters);
     
             while (jobExecution.isRunning()) {
-                logger.info("...");
+                log.info("...");
             }
             
-            logger.info("## Job Execution: " + jobExecution.getStatus());
-            logger.info("## Job getJobConfigurationName: " + jobExecution.getJobConfigurationName());
-            logger.info("## Job getJobId: " + jobExecution.getJobId());
-            logger.info("## Job getExitStatus: " + jobExecution.getExitStatus());
-            logger.info("## Job getJobInstance: " + jobExecution.getJobInstance());
-            logger.info("## Job getStepExecutions: " + jobExecution.getStepExecutions());
-            logger.info("## Job getLastUpdated: " + jobExecution.getLastUpdated());
-            logger.info("## Job getFailureExceptions: " + jobExecution.getFailureExceptions());
+            log.info("## Job Execution: " + jobExecution.getStatus());
+            log.info("## Job getJobConfigurationName: " + jobExecution.getJobConfigurationName());
+            log.info("## Job getJobId: " + jobExecution.getJobId());
+            log.info("## Job getExitStatus: " + jobExecution.getExitStatus());
+            log.info("## Job getJobInstance: " + jobExecution.getJobInstance());
+            log.info("## Job getStepExecutions: " + jobExecution.getStepExecutions());
+            log.info("## Job getLastUpdated: " + jobExecution.getLastUpdated());
+            log.info("## Job getFailureExceptions: " + jobExecution.getFailureExceptions());
         } catch (Exception e) {
             e.printStackTrace();
         }

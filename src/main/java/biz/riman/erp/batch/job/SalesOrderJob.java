@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import biz.riman.erp.batch.listener.JobListener;
+import biz.riman.erp.batch.listener.StepListener;
+import biz.riman.erp.batch.parameter.SalesOrderParameter;
 import biz.riman.erp.batch.service.BTPConnectionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ public class SalesOrderJob {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final BTPConnectionService service;
+    private final SalesOrderParameter parameter;
 
     public static final String JOB_NAME = "order.SalesBatch";
     public static final String STEP_NAME = ".syncStep";
@@ -39,8 +42,9 @@ public class SalesOrderJob {
     public Step syncStep() {
         log.info("## {} - {} Step 실행 ##", JOB_NAME, STEP_NAME);
         return stepBuilderFactory.get(JOB_NAME + STEP_NAME)
+                .listener(new StepListener())
                 .tasklet((contribution, chunkContext) -> {
-                    String response = service.BTPConnectionSalesOrder();
+                    String response = service.BTPConnectionSalesOrder(parameter.getDate());
                     log.info("## response : {}", response);
                     return RepeatStatus.FINISHED;
                 })
